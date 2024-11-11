@@ -1,0 +1,53 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build and output directories
+dist/
+build/
+temp/
+coverage/
+
+# Environment and configuration files
+.env
+.env.*.local
+.env.local
+
+# Logs
+logs/
+*.log
+*.log.*
+pids
+*.pid
+*.pid.lock
+
+# Database and local files
+*.sqlite
+*.db
+*.sqlite3
+dump.rdb
+*.local
+*.bak
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Editor and IDE settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary files
+*.tmp
+*.temp
+
+# Package files
+*.tgz
