@@ -107,10 +107,9 @@ export const userLogin = async (data) => {
   }
 };
 
-export const userUpdate = async (data) => {
+export const userUpdate = async (userId, data) => {
   try {
     const { name, bio, avatar } = data;
-    const userId = req.user.id;
     console.log("data of user update : ", data);
     console.log("userId from token : ", userId);
 

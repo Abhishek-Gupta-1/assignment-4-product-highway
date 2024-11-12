@@ -30,7 +30,8 @@ export const login = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
-    const response = await userUpdate(req.body);
+    const  userId = req.user.id;
+    const response = await userUpdate(userId, req.body);
     return res.json({ response });
   } catch (error) {
     console.log("Error : ", error);
