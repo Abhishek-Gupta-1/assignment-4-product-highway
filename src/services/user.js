@@ -2,12 +2,10 @@ import UserModal from "../modals/user.modal.js";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-
-
 export const userRegister = async (data) => {
   try {
     const { username, password, bio } = data
-    console.log("data",data)
+    console.log("data :",data)
 
     // Check if username already exists
     const existingUser = await UserModal.findOne({ username });
