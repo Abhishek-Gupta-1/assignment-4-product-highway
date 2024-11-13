@@ -3,7 +3,7 @@ import { userRegister, userLogin, userUpdate } from "../services/user.js";
 export const register = async (req, res) => {
   try {
     const saveUser = await userRegister(req.body);
-    return res.status(201).json({
+    return res.status(200).json({
       message: "user registered successfully",
       saveUser,
     });

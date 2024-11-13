@@ -6,19 +6,25 @@ const PostSchema = new Schema({
     type: String,
     required: true,
     trim: true,
+    maxLength: 5000 
   },
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
+    index: true
   },
   likes: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
-  }]
+  }],
+  isActive: {
+    type: Boolean,
+    default: true
+  }
 }, {
-  timestamps: true,
+  timestamps: true
 });
 
-const Post = mongoose.model('Post', PostSchema);
-export default Post;
+const PostModel = mongoose.model('Post', PostSchema);
+export default PostModel;
