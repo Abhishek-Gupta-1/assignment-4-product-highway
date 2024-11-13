@@ -1,4 +1,4 @@
-import PostModel from "../modals/post.model.js";
+import PostModel from "../models/post.model.js";
 
 export const createUserPost = async (userId, data) => {
   try {
