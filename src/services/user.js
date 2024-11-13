@@ -4,37 +4,32 @@ import jwt from "jsonwebtoken";
 
 export const userRegister = async (data) => {
   try {
+    console.log(data);
     const { name, username, password, bio } = data;
-    console.log("data of user registration:", data);
 
     // Check if username already exists
     const existingUser = await UserModal.findOne({ username });
-
     if (existingUser) {
-      console.log("user exist", existingUser);
       return {
         success: false,
         message: "Username already exists",
       };
     }
 
-    // Hash password
+    // Hash the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create new user
+    // Create a new user
     const newUser = new UserModal({
       name,
       username,
       password: hashedPassword,
       bio: bio || "",
     });
-
-    // Save user to database
     const savedUser = await newUser.save();
-    console.log("save in db", savedUser);
 
-    // Generate JWT token
+    // Generate a JWT token
     const token = jwt.sign(
       { userId: savedUser._id, username: savedUser.username },
       process.env.JWT_SECRET,
@@ -43,21 +38,15 @@ export const userRegister = async (data) => {
       }
     );
 
-    // Return success response without password
+    // Return the token and user data
     return {
       success: true,
-      data: {
-        user: {
-          id: savedUser._id,
-          name: savedUser.name,
-          username: savedUser.username,
-          bio: savedUser.bio,
-          avatar: savedUser.avatar,
-          followers: savedUser.followers,
-          following: savedUser.following,
-          createdAt: savedUser.createdAt,
-        },
-        token,
+      token,
+      user: {
+        id: savedUser._id,
+        name: savedUser.name,
+        username: savedUser.username,
+        bio: savedUser.bio,
       },
     };
   } catch (error) {
