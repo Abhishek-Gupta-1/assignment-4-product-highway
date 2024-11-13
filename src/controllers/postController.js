@@ -1,4 +1,4 @@
-import { createUserPost, showPost, deletePost, updatePost} from "../services/post.js";
+import { createUserPost, showUserPost, deleteUserPost, updateUserPost} from "../services/post.js";
 
 export const createPost = async(req, res) => {
     try {
@@ -17,53 +17,69 @@ export const createPost = async(req, res) => {
     }
 }
 
+
 export const showPost = async(req, res) => {
     try {
         const userId = req.user.id;
-        const posts = await showUserPost(userId, req.body);
+        const result = await showUserPost(userId);
+        
         return res.status(200).json({
             success: true,
-            message: "Posts retrieved successfully", 
-            data: posts,
+            message: "Posts retrieved successfully",
+            data: result.data,
         });
     } catch(error) {
         res.status(500).json({
             success: false,
-            message: error.message || "Error retrieving posts", 
+            message: error.message || "Error retrieving posts",
         });
     }
 }
+
 
 export const deletePost = async(req, res) => {
     try {
         const userId = req.user.id;
-        const deletedPost = await deleteUserPost(userId, req.body);
+        const postId = req.params.postId;  
+
+        const result = await deleteUserPost(userId, { postId });
+
+        if (!result.success) {
+            return res.status(404).json(result);
+        }
+
         return res.status(200).json({
             success: true,
-            message: "Post deleted successfully",  
-            data: deletedPost,
+            message: "Post deleted successfully",
         });
     } catch(error) {
         res.status(500).json({
             success: false,
-            message: error.message || "Error deleting post",  
+            message: error.message || "Error deleting post",
         });
     }
 }
 
-export const updatePost = async(req, res) => {  
+export const updatePost = async(req, res) => {
     try {
         const userId = req.user.id;
-        const updatedPost = await updateUserPost(userId, req.body);
+        const { postId, content } = req.body;
+
+        const result = await updateUserPost(userId, { postId, content });
+
+        if (!result.success) {
+            return res.status(404).json(result);
+        }
+
         return res.status(200).json({
             success: true,
-            message: "Post updated successfully",  
-            data: updatedPost,
+            message: "Post updated successfully",
+            data: result.data,
         });
     } catch(error) {
         res.status(500).json({
             success: false,
-            message: error.message || "Error updating post",  
+            message: error.message || "Error updating post",
         });
     }
 }
