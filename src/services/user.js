@@ -149,13 +149,16 @@ export const userUpdate = async (userId, data) => {
 
     return {
       success: true,
-      data: {
-        user: {
-          id: updatedUser._id,
-          name: updatedUser.name,
-          bio: updatedUser.bio,
-          avatar: updatedUser.avatar,
-        },
+      user: {
+        id: updatedUser._id,
+        name: updatedUser.name,
+        username: updatedUser.username,
+        bio: updatedUser.bio,
+        avatar: updatedUser.avatar,
+        followers: updatedUser.followers,
+        following: updatedUser.following,
+        createdAt: updatedUser.createdAt,
+        updatedAt: updatedUser.updatedAt,
       },
     };
   } catch (error) {

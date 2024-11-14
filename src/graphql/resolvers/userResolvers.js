@@ -1,4 +1,13 @@
 import { userRegister, userLogin, userUpdate } from '../../services/user.js';
+import { authMiddleware } from '../../middleware/authMiddleware.js';
+
+
+export const graphqlMiddleware = {
+  Mutation: {
+    updateUser: authMiddleware,
+  },
+};
+
 
 export const userResolvers = {
   Query: {
@@ -19,10 +28,17 @@ export const userResolvers = {
       console.log("the token and user: ", res);
       return res;
     },
-    updateUser: async (_, args, { user }) => {
-      const updatedUser = await userUpdate(user.id, args);
-      return updatedUser.data.user;
-    }
+    updateUser: async (_, args,context, { userId1 }) => {
+      console.log("context",context.user)
+      const userId = context.user.id
+      const res = await userUpdate(userId, args);
+      return {
+        success: res.success,
+        user: res.success ? res.user : null,
+        message: res.message,
+        error: res.error,
+      };
+    },
   },
   User: {
     followers: async (user) => {

@@ -22,6 +22,13 @@ const typeDefs = gql`
     error: String
   }
 
+    type UpdateUserResponse {
+    success: Boolean!
+    user: User
+    message: String
+    error: String
+  }
+
   type Query {
     me: User!
     user(username: String!): User
@@ -35,7 +42,7 @@ const typeDefs = gql`
       bio: String
     ): AuthPayload!
     login(username: String!, password: String!): AuthPayload!
-    updateUser(name: String, bio: String, avatar: String): User!
+    updateUser(name: String, bio: String, avatar: String): UpdateUserResponse!
   }
 `;
 
