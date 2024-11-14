@@ -15,9 +15,9 @@ export const userResolvers = {
       return res;
     },
     login: async (_, args) => {
-      const token = await userLogin(args);
-      const user = await getUserByUsername(args.username);
-      return { token, user };
+      const res = await userLogin(args);
+      console.log("the token and user: ", res);
+      return res;
     },
     updateUser: async (_, args, { user }) => {
       const updatedUser = await userUpdate(user.id, args);

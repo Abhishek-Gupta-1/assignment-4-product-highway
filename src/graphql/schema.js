@@ -1,5 +1,5 @@
-import { gql } from 'apollo-server-express';
-import { userResolvers } from './resolvers/userResolvers.js';
+import { gql } from "apollo-server-express";
+import { userResolvers } from "./resolvers/userResolvers.js";
 
 const typeDefs = gql`
   type User {
@@ -14,13 +14,13 @@ const typeDefs = gql`
     updatedAt: String!
   }
 
-type AuthPayload {
-  success: Boolean!
-  token: String
-  user: User
-  message: String
-  error: String
-}
+  type AuthPayload {
+    success: Boolean!
+    token: String
+    user: User
+    message: String
+    error: String
+  }
 
   type Query {
     me: User!
@@ -28,7 +28,12 @@ type AuthPayload {
   }
 
   type Mutation {
-    register(name: String!, username: String!, password: String!, bio: String): AuthPayload!
+    register(
+      name: String!
+      username: String!
+      password: String!
+      bio: String
+    ): AuthPayload!
     login(username: String!, password: String!): AuthPayload!
     updateUser(name: String, bio: String, avatar: String): User!
   }
@@ -36,14 +41,14 @@ type AuthPayload {
 
 const resolvers = {
   Query: {
-    ...userResolvers.Query
+    ...userResolvers.Query,
   },
   Mutation: {
-    ...userResolvers.Mutation
+    ...userResolvers.Mutation,
   },
   User: {
-    ...userResolvers.User
-  }
+    ...userResolvers.User,
+  },
 };
 
 export { typeDefs, resolvers };

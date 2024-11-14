@@ -68,13 +68,19 @@ export const userLogin = async (data) => {
     console.log(existingUser);
     if (!existingUser) {
       console.log("User didn't exist");
-      return "User didn't exist! Please Register first";
+      return {
+        success: false,
+        message: "User didn't exist! Please Register first",
+      };
     } else if (existingUser) {
       const encryptPassword = existingUser.password;
       const validPassword = await bcrypt.compare(password, encryptPassword);
 
       if (!validPassword) {
-        return "Invalid credentials";
+        return {
+          success: false,
+          message: "Invalid Credentials",
+        };
       }
 
       const token = jwt.sign(
@@ -83,9 +89,22 @@ export const userLogin = async (data) => {
         { expiresIn: "24h" }
       );
 
-      console.log("token");
-
-      return token;
+      console.log(existingUser);
+      return {
+        success: true,
+        token,
+        user: {
+          id: existingUser._id,
+          name: existingUser.name,
+          username: existingUser.username,
+          bio: existingUser.bio,
+          avatar: existingUser.avatar,
+          followers: existingUser.followers,
+          following: existingUser.following,
+          createdAt: existingUser.createdAt,
+          updatedAt: existingUser.updatedAt
+        }
+      };
     }
   } catch (error) {
     return {
