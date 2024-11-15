@@ -4,6 +4,7 @@ export const createUserPost = async (userId, data) => {
   try {
     const { content } = data;
     console.log("the post content : ", content);
+    console.log("ther user id : ", userId);
 
     const newPost = new PostModel({
       content,

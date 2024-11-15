@@ -1,69 +1,18 @@
 import { gql } from "apollo-server-express";
 import { userResolvers } from "../resolvers/userResolvers.js";
-
-export const types = gql`
-  type User {
-    id: ID!
-    name: String
-    username: String!
-    bio: String
-    avatar: String
-    followers: [User!]!
-    following: [User!]!
-    createdAt: String!
-    updatedAt: String!
-  }
-
-  type AuthPayload {
-    success: Boolean!
-    token: String
-    user: User
-    message: String
-    error: String
-  }
-
-  type UpdateUserResponse {
-    success: Boolean!
-    user: User
-    message: String
-    error: String
-  }
-
-  type UserDataResponse {
-    user: User
-    message: String
-    success: Boolean
-    error: String
-  }
-`;
-
-export const query = gql`
-  type Query {
-    Getuser(username: String!): UserDataResponse
-  }
-`;
-
-export const mutation = gql`
-  type Mutation {
-    register(
-      name: String!
-      username: String!
-      password: String!
-      bio: String
-    ): AuthPayload!
-
-    login(username: String!, password: String!): AuthPayload!
-
-    updateUser(name: String, bio: String, avatar: String): UpdateUserResponse!
-  }
-`;
+import { userTypes, userQuery, userMutation } from "./userSchema.js";
+import { postQuery, postMutation, postTypes } from "./postSchema.js";
+import { postResolvers } from "../resolvers/postResolvers.js";
 
 const typeDefs = gql`
-  ${types}
+  ${userTypes}
+  ${postTypes}
 
-  ${query}
+  ${userQuery}
+  ${postQuery}
 
-  ${mutation}
+  ${userMutation}
+  ${postMutation}
 `;
 
 // const typeDefs = gql`
@@ -114,12 +63,17 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     ...userResolvers.Query,
+    ...postResolvers.Query,
   },
   Mutation: {
     ...userResolvers.Mutation,
+    ...postResolvers.Mutation,
   },
   User: {
     ...userResolvers.User,
+  },
+  Post: {
+    ...postResolvers.Post,
   },
 };
 
