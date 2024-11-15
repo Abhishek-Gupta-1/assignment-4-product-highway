@@ -102,8 +102,8 @@ export const userLogin = async (data) => {
           followers: existingUser.followers,
           following: existingUser.following,
           createdAt: existingUser.createdAt,
-          updatedAt: existingUser.updatedAt
-        }
+          updatedAt: existingUser.updatedAt,
+        },
       };
     }
   } catch (error) {
@@ -166,6 +166,38 @@ export const userUpdate = async (userId, data) => {
     return {
       success: false,
       message: "Failed to update the User Details",
+      error: error.message,
+    };
+  }
+};
+
+export const getUserDataByUsername = async (username) => {
+  try {
+    const userData = await UserModal.findOne({ username });
+    console.log("userData",userData);
+    if (!userData) {
+      return {
+        success: false,
+        message: "User not found",
+      };
+    }
+
+    return {
+      user:{
+        id: userData._id,
+        name: userData.name,
+        username: userData.username,
+        bio: userData.bio,
+        avatar: userData.avatar,
+        followers: userData.followers,
+        following: userData.following,
+      }
+    };
+    
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to Find the User Details",
       error: error.message,
     };
   }

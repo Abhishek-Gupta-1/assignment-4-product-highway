@@ -1,4 +1,4 @@
-import { userRegister, userLogin, userUpdate } from "../../services/user.js";
+import { userRegister, userLogin, userUpdate, getUserDataByUsername } from "../../services/user.js";
 import { authMiddleware } from "../../middleware/authMiddleware.js";
 
 export const graphqlMiddleware = {
@@ -9,10 +9,8 @@ export const graphqlMiddleware = {
 
 export const userResolvers = {
   Query: {
-    me: async (_, __, { user }) => user,
-    user: async (_, { username }) => {
-      const userData = await getUserByUsername(username);
-      return userData;
+    Getuser: async (_, { username }) => {
+      return await getUserDataByUsername(username);
     },
   },
   Mutation: {

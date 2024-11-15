@@ -1,11 +1,10 @@
 import { gql } from "apollo-server-express";
 import { userResolvers } from "../resolvers/userResolvers.js";
 
-
 export const types = gql`
   type User {
     id: ID!
-    name: String!
+    name: String
     username: String!
     bio: String
     avatar: String
@@ -14,7 +13,7 @@ export const types = gql`
     createdAt: String!
     updatedAt: String!
   }
-  
+
   type AuthPayload {
     success: Boolean!
     token: String
@@ -29,13 +28,18 @@ export const types = gql`
     message: String
     error: String
   }
-`;
 
+  type UserDataResponse {
+    user: User
+    message: String
+    success: Boolean
+    error: String
+  }
+`;
 
 export const query = gql`
   type Query {
-    me: User!
-    user(username: String!): User
+    Getuser(username: String!): UserDataResponse
   }
 `;
 
@@ -54,15 +58,12 @@ export const mutation = gql`
   }
 `;
 
-
 const typeDefs = gql`
- ${types}
+  ${types}
 
+  ${query}
 
-   ${query}
-  
-
- ${mutation}
+  ${mutation}
 `;
 
 // const typeDefs = gql`
@@ -77,7 +78,7 @@ const typeDefs = gql`
 //     createdAt: String!
 //     updatedAt: String!
 //   }
-  
+
 //   type AuthPayload {
 //     success: Boolean!
 //     token: String
@@ -113,7 +114,6 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     ...userResolvers.Query,
-    
   },
   Mutation: {
     ...userResolvers.Mutation,
@@ -122,6 +122,5 @@ const resolvers = {
     ...userResolvers.User,
   },
 };
-
 
 export { typeDefs, resolvers };

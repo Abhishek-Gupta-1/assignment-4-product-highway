@@ -37,6 +37,8 @@ const UserSchema = new Schema({
   timestamps: true,
 });
 
+UserSchema.index({ username: 1 }, { unique: true });
 const UserModal = mongoose.model('User', UserSchema);
+
 
 export default UserModal;
