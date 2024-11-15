@@ -1,5 +1,5 @@
 import { gql } from "apollo-server-express";
-import { userResolvers } from "./resolvers/userResolvers.js";
+import { userResolvers } from "../resolvers/userResolvers.js";
 
 const typeDefs = gql`
   type User {
@@ -13,7 +13,7 @@ const typeDefs = gql`
     createdAt: String!
     updatedAt: String!
   }
-
+  
   type AuthPayload {
     success: Boolean!
     token: String
@@ -22,7 +22,7 @@ const typeDefs = gql`
     error: String
   }
 
-    type UpdateUserResponse {
+  type UpdateUserResponse {
     success: Boolean!
     user: User
     message: String

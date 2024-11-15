@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 export const authMiddleware = async (resolve, parent, args, context, info) => {
   try {
-    const token = context.token; // Get token directly from context
+    const token = context.token; 
     console.log("Token in middleware:", token);
 
     if (!token) {
