@@ -31,26 +31,29 @@ export const toggleFollow = async (userId, followingId) => {
     }
 
     // Check if the user already follows
-    const alreadyFollows = findFollowing.followers.includes(userId);
+    const alreadyFollows = findFollowing.followers.some(
+      (followerId) => followerId.toString() === userId.toString()
+    );
 
     if (alreadyFollows) {
       // Remove the user from followers
       findFollowing.followers = findFollowing.followers.filter(
-        (followerId) => followerId !== userId
+        (followerId) => followerId.toString() !== userId.toString()
       );
       await findFollowing.save();
-
       return {
         success: true,
         message: "Successfully unfollowed the user",
+        findFollowing,
       };
     } else {
+      // Add the user to followers
       findFollowing.followers.push(userId);
       await findFollowing.save();
-
       return {
         success: true,
         message: "Successfully followed the user",
+        findFollowing,
       };
     }
   } catch (error) {
