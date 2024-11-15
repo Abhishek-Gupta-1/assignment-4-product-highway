@@ -1,11 +1,4 @@
 import { userRegister, userLogin, userUpdate, getUserDataByUsername } from "../../services/user.js";
-import { authMiddleware } from "../../middleware/authMiddleware.js";
-
-export const graphqlMiddleware = {
-  Mutation: {
-    updateUser: authMiddleware,
-  },
-};
 
 export const userResolvers = {
   Query: {

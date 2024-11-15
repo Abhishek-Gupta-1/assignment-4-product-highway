@@ -2,7 +2,7 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { typeDefs, resolvers } from "./graphql/schemas/index.js";
 import { connectDB } from "./config/db.js";
-import { graphqlMiddleware } from "./graphql/resolvers/userResolvers.js";
+import { graphqlMiddleware } from "./graphql/resolvers/globalMiddleware.js";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { applyMiddleware } from "graphql-middleware";
 
@@ -15,11 +15,7 @@ connectDB();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-console.log(
-  { typeDefs, resolvers }
-)
-
-
+console.log({ typeDefs, resolvers });
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 const schemaWithMiddleware = applyMiddleware(schema, graphqlMiddleware);

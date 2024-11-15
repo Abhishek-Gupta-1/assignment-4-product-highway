@@ -2,16 +2,7 @@ import { createUserPost, showUserPost, updateUserPost, deleteUserPost } from "..
 import { authMiddleware } from "../../middleware/authMiddleware.js";
 import UserModal from "../../models/user.modal.js";
 
-export const graphqlMiddleware = {
-  Mutation: {
-    createPost: authMiddleware,
-    updatePost: authMiddleware,
-    deletePost: authMiddleware,
-  },
-  Query: {
-    userPosts: authMiddleware,
-  },
-};
+
 
 export const postResolvers = {
   Query: {
