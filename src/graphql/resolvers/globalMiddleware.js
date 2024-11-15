@@ -6,8 +6,12 @@ export const graphqlMiddleware = {
     createPost: authMiddleware,
     updatePost: authMiddleware,
     deletePost: authMiddleware,
+    toggleFollow: authMiddleware,
+
   },
   Query: {
     userPosts: authMiddleware,
+    followStats: authMiddleware,
+
   },
 };

@@ -1,18 +1,25 @@
 import { gql } from "apollo-server-express";
 import { userResolvers } from "../resolvers/userResolvers.js";
+import { postResolvers } from "../resolvers/postResolvers.js";
+import { followResolvers } from "../resolvers/followResolver.js";
 import { userTypes, userQuery, userMutation } from "./userSchema.js";
 import { postQuery, postMutation, postTypes } from "./postSchema.js";
-import { postResolvers } from "../resolvers/postResolvers.js";
+import { followQuery, followMutation, followTypes } from "./followSchema.js";
+
+
 
 const typeDefs = gql`
   ${userTypes}
   ${postTypes}
+  ${followTypes}
 
   ${userQuery}
   ${postQuery}
+  ${followQuery}
 
   ${userMutation}
   ${postMutation}
+  ${followMutation}
 `;
 
 // const typeDefs = gql`
@@ -64,10 +71,12 @@ const resolvers = {
   Query: {
     ...userResolvers.Query,
     ...postResolvers.Query,
+    ...followResolvers.Query,
   },
   Mutation: {
     ...userResolvers.Mutation,
     ...postResolvers.Mutation,
+    ...followResolvers.Mutation,
   },
   User: {
     ...userResolvers.User,

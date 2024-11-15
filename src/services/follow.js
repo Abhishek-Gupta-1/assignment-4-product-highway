@@ -1,9 +1,15 @@
-import FollowModel from "../models/follow.model.js";
+import mongoose from "mongoose";
+import UserModel from "../models/user.modal.js";
 
-export const toggleFollow = async (systemId, data) => {
+export const toggleFollow = async (userId, followingId) => {
   try {
-    const { userId } = data;
-
+    if (userId == followingId) {
+      return {
+        success: false,
+        message: "User Can't Follow ItSelf",
+      };
+    }
+    console.log("user id ", userId, "follwing id : ", followingId);
     if (!userId) {
       return {
         success: false,
@@ -11,42 +17,40 @@ export const toggleFollow = async (systemId, data) => {
       };
     }
 
-    if (systemId === userId) {
+    const findFollowing = await UserModel.findById(followingId);
+
+    if (!findFollowing) {
       return {
         success: false,
-        message: "You cannot follow yourself",
+        message: "Follwing Account not found",
       };
     }
 
-    // Check if already following
-    const existingFollow = await FollowModel.findOne({
-      systemId,
-      userId,
-    });
+    if (!Array.isArray(findFollowing.followers)) {
+      findFollowing.followers = [];
+    }
 
-    if (existingFollow) {
-      // Unfollow - remove the existing follow
-      await FollowModel.findByIdAndDelete(existingFollow._id);
+    // Check if the user already follows
+    const alreadyFollows = findFollowing.followers.includes(userId);
+
+    if (alreadyFollows) {
+      // Remove the user from followers
+      findFollowing.followers = findFollowing.followers.filter(
+        (followerId) => followerId !== userId
+      );
+      await findFollowing.save();
+
       return {
         success: true,
-        message: "User unfollowed successfully",
-        data: {
-          following: false,
-        },
+        message: "Successfully unfollowed the user",
       };
     } else {
-      // Follow - create new follow
-      const newFollow = new FollowModel({
-        systemId,
-        userId,
-      });
-      await newFollow.save();
+      findFollowing.followers.push(userId);
+      await findFollowing.save();
+
       return {
         success: true,
-        message: "User followed successfully",
-        data: {
-          following: true,
-        },
+        message: "Successfully followed the user",
       };
     }
   } catch (error) {
@@ -61,22 +65,33 @@ export const toggleFollow = async (systemId, data) => {
 
 export const getFollowStats = async (userId) => {
   try {
-    // Get followers and following counts
-    const [followers, following] = await Promise.all([
-      FollowModel.find({ userId }).select("systemId -_id"),
-      FollowModel.find({ systemId: userId }).select("userId -_id"),
-    ]);
+    console.log("USERID", userId);
+
+    const findUser = await UserModel.findById(userId)
+      .populate({
+        path: "followers",
+        select: "-password -createdAt -updatedAt",
+        model: "User",
+      })
+      .populate({
+        path: "following",
+        select: "-password -createdAt -updatedAt",
+        model: "User",
+      })
+      .select("-password -createdAt -updatedAt");
+
+    console.log("USER ", findUser);
+
+    if (!findUser) {
+      return {
+        success: false,
+        message: "USer Not found",
+      };
+    }
 
     return {
       success: true,
-      data: {
-        stats: {
-          followers: followers.length,
-          following: following.length,
-        },
-        followers: followers.map((f) => f.systemId),
-        following: following.map((f) => f.userId),
-      },
+      findUser,
     };
   } catch (error) {
     console.error("Error in getFollowStats:", error);

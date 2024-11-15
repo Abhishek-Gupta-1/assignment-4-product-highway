@@ -21,5 +21,5 @@ const FollowSchema = new Schema({
 // Compound index to ensure unique follows and efficient queries
 FollowSchema.index({ systemId: 1, userId: 1 }, { unique: true });
 
-const FollowModel = mongoose.model('Follow', FollowSchema);
+const FollowModel =  mongoose.model.Follow || mongoose.model('Follow', FollowSchema);
 export default FollowModel;
