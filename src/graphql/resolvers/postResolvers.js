@@ -2,8 +2,6 @@ import { createUserPost, showUserPost, updateUserPost, deleteUserPost } from "..
 import { authMiddleware } from "../../middleware/authMiddleware.js";
 import UserModal from "../../models/user.modal.js";
 
-
-
 export const postResolvers = {
   Query: {
     userPosts: async (_, { userId }, context) => {
