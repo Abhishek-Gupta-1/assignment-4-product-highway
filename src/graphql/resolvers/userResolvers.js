@@ -9,12 +9,10 @@ export const userResolvers = {
   Mutation: {
     register: async (_, args) => {
       const res = await userRegister(args);
-      console.log("the token and user: ", res);
       return res;
     },
     login: async (_, args) => {
       const res = await userLogin(args);
-      console.log("the token and user: ", res);
       return res;
     },
     updateUser: async (_, args, context) => {

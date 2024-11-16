@@ -38,9 +38,7 @@ export const notificationResolvers = {
     Subscription: {
         notificationAdded: {
             subscribe: (_, { userId }) => {
-                console.log('New subscription for userId:', userId);
                 const channel = `${NOTIFICATION_ADDED}.${userId}`;
-                console.log('Subscribing to channel:', channel);
                 return pubsub.asyncIterator([channel]);
             },
     },

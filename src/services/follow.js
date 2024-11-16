@@ -95,7 +95,6 @@ export const toggleFollow = async (userId, followingId) => {
 
 export const getFollowStats = async (userId) => {
   try {
-    console.log("USERID", userId);
 
     const findUser = await UserModel.findById(userId)
       .populate({
@@ -110,7 +109,6 @@ export const getFollowStats = async (userId) => {
       })
       .select("-password -createdAt -updatedAt");
 
-    console.log("USER ", findUser);
 
     if (!findUser) {
       return {

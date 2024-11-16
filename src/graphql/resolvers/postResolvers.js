@@ -27,7 +27,6 @@ export const postResolvers = {
   Mutation: {
     createPost: async (_, args, context) => {
       const userId = context.user.id;
-      console.log("createuserpost");
       const res = await createUserPost(userId, args);
       return res;
     },
@@ -37,14 +36,8 @@ export const postResolvers = {
       return res;
     },
     togglePostLike: async (_, { postId }, context) => {
-      console.log(
-        "the post Id is : ",
-        postId,
-        "and the context is : ",
-        context
-      );
+      
       const userId = context.user.id;
-      console.log("the userid", userId);
       const res = await togglePostLike(userId, { postId });
       return res;
     },

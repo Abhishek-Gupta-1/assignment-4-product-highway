@@ -5,8 +5,7 @@ import NotificationService from "./notification.js";
 export const createUserPost = async (userId, data) => {
   try {
     const { content } = data;
-    console.log("the post content : ", content);
-    console.log("ther user id : ", userId);
+
 
     const newPost = new PostModel({
       content,
@@ -14,7 +13,6 @@ export const createUserPost = async (userId, data) => {
     });
 
     const savePost = await newPost.save();
-    console.log("Post created: ", savePost);
 
     // Transform the response to include explicit postId
     const transformedPost = {

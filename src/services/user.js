@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 
 export const userRegister = async (data) => {
   try {
-    console.log(data);
     const { name, username, password, bio } = data;
 
     // Check if username already exists
@@ -61,13 +60,10 @@ export const userRegister = async (data) => {
 export const userLogin = async (data) => {
   try {
     const { username, password } = data;
-    console.log("data of user login :", data);
 
     //check if user register or not
     const existingUser = await UserModel.findOne({ username: username });
-    console.log(existingUser);
     if (!existingUser) {
-      console.log("User didn't exist");
       return {
         success: false,
         message: "User didn't exist! Please Register first",
@@ -89,7 +85,6 @@ export const userLogin = async (data) => {
         { expiresIn: "24h" }
       );
 
-      console.log(existingUser);
       return {
         success: true,
         token,
@@ -118,8 +113,7 @@ export const userLogin = async (data) => {
 export const userUpdate = async (userId, data) => {
   try {
     const { name, bio, avatar } = data;
-    console.log("data of user update : ", data);
-    console.log("userId from token : ", userId);
+
 
     const existingUser = await UserModel.findById(userId);
     if (!existingUser) {
@@ -162,7 +156,6 @@ export const userUpdate = async (userId, data) => {
       },
     };
   } catch (error) {
-    console.log("Error : ", error.message);
     return {
       success: false,
       message: "Failed to update the User Details",
@@ -174,7 +167,6 @@ export const userUpdate = async (userId, data) => {
 export const getUserDataByUsername = async (username) => {
   try {
     const userData = await UserModel.findOne({ username });
-    console.log("userData", userData);
     if (!userData) {
       return {
         success: false,

@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const { MONGODB_URL } = process.env;
-console.log("PRINT: " + MONGODB_URL);
+// console.log("PRINT: " + MONGODB_URL);
 
 export const connectDB = () => {
   mongoose
@@ -16,5 +16,5 @@ export const connectDB = () => {
     .catch((err) => {
       console.log("DB Connection Failed");
       process.exit(1);
-    });
+    });
 };

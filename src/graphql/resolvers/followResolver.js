@@ -18,7 +18,6 @@ export const followResolvers = {
   Mutation: {
     toggleFollow: async (_, { followingId }, context) => {
       const userId = context.user.id;
-      console.log("thse userdi : ", userId, "and the contest id: ", context.user.userId);
       const response = await toggleFollow(userId, followingId);
       return response;
     },
