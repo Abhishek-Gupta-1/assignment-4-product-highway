@@ -53,10 +53,10 @@ export const createComment = async (userId, data) => {
         { session }
       );
 
+      await NotificationService.newComment(savedComment, post.userId);
+
       // Commit the transaction
       await session.commitTransaction();
-      await NotificationService.newComment(content, postId);
-
 
       const transformedComment = {
         commentId: savedComment._id,

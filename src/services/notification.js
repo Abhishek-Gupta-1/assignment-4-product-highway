@@ -110,16 +110,6 @@ class NotificationService {
       relatedId: postId,
     });
   }
-
-  async mention(mentionedUserId, postId, commentId) {
-    const message = `You were mentioned in a comment on a post.`;
-    return await this.createNotification({
-      type: "MENTION",
-      userId: mentionedUserId,
-      message,
-      relatedId: commentId,
-    });
-  }
 }
 
 export default new NotificationService();

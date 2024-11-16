@@ -163,8 +163,6 @@ export const deleteUserPost = async (userId, data) => {
 export const togglePostLike = async (userId, data) => {
   try {
     const { postId } = data;
-
-
     const objectId = new mongoose.Types.ObjectId(postId);
     const post = await PostModel.findById(objectId);
     const postAuthorId = post.userId;
