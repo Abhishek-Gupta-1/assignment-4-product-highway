@@ -4,7 +4,6 @@ import NotificationService from "./notification.js";
 
 export const toggleFollow = async (userId, followingId) => {
   try {
-    // Input validation
     if (!userId || !followingId) {
       return {
         success: false,
@@ -19,13 +18,11 @@ export const toggleFollow = async (userId, followingId) => {
       };
     }
 
-    // Find both users
     const [currentUser, userToFollow] = await Promise.all([
       UserModel.findById(userId),
       UserModel.findById(followingId),
     ]);
 
-    // Validate both users exist
     if (!currentUser || !userToFollow) {
       return {
         success: false,
@@ -33,7 +30,6 @@ export const toggleFollow = async (userId, followingId) => {
       };
     }
 
-    // Initialize arrays if they don't exist
     if (!Array.isArray(currentUser.following)) {
       currentUser.following = [];
     }
@@ -41,13 +37,11 @@ export const toggleFollow = async (userId, followingId) => {
       userToFollow.followers = [];
     }
 
-    // Check if already following
     const alreadyFollowing = currentUser.following.some(
       (id) => id.toString() === followingId.toString()
     );
 
     if (alreadyFollowing) {
-      // Remove from following and followers
       currentUser.following = currentUser.following.filter(
         (id) => id.toString() !== followingId.toString()
       );
@@ -67,7 +61,6 @@ export const toggleFollow = async (userId, followingId) => {
         userToFollow,
       };
     } else {
-      // Add to following and followers
       currentUser.following.push(followingId);
       userToFollow.followers.push(userId);
 

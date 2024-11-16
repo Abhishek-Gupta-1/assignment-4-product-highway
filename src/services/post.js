@@ -14,7 +14,6 @@ export const createUserPost = async (userId, data) => {
 
     const savePost = await newPost.save();
 
-    // Transform the response to include explicit postId
     const transformedPost = {
       postId: savePost._id,
       content: savePost.content,
@@ -46,7 +45,6 @@ export const showUserPost = async (userId) => {
       userId,
     }).sort({ createdAt: -1 });
 
-    // Transform each post to include explicit postId
     const transformedPosts = posts.map((post) => ({
       postId: post._id,
       content: post.content,
@@ -95,7 +93,6 @@ export const updateUserPost = async (userId, data) => {
       { new: true }
     );
 
-    // Transform the response to include explicit postId
     const transformedPost = {
       postId: updatedPost._id,
       content: updatedPost.content,

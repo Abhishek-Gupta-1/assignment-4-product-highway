@@ -8,7 +8,6 @@ export const createComment = async (userId, data) => {
   try {
     const { postId, content } = data;
 
-    // Verify user exists
     const userExists = await UserModel.findOne({
       _id: userId,
     });
@@ -20,7 +19,6 @@ export const createComment = async (userId, data) => {
       };
     }
 
-    // Verify post exists and is active
     const post = await PostModel.findOne({
       _id: postId,
     });
@@ -38,15 +36,12 @@ export const createComment = async (userId, data) => {
       userId,
     });
 
-    // Use a session to ensure atomicity
     const session = await mongoose.startSession();
     session.startTransaction();
 
     try {
-      // Save the comment
       const savedComment = await newComment.save({ session });
 
-      // Update the post to include the new comment ID
       await PostModel.findByIdAndUpdate(
         postId,
         { $push: { comments: savedComment._id } },
@@ -55,7 +50,6 @@ export const createComment = async (userId, data) => {
 
       await NotificationService.newComment(savedComment, post.userId);
 
-      // Commit the transaction
       await session.commitTransaction();
 
       const transformedComment = {
@@ -75,7 +69,6 @@ export const createComment = async (userId, data) => {
         },
       };
     } catch (error) {
-      // If an error occurs, abort the transaction
       await session.abortTransaction();
       throw error;
     } finally {
@@ -94,12 +87,10 @@ export const deleteComment = async (userId, data) => {
   try {
     const { commentId } = data;
 
-    // Start a session for the transaction
     const session = await mongoose.startSession();
     session.startTransaction();
 
     try {
-      // Find the comment
       const comment = await CommentModel.findOne({
         _id: commentId,
         userId,
@@ -114,17 +105,14 @@ export const deleteComment = async (userId, data) => {
         };
       }
 
-      // Delete the comment
       await CommentModel.findByIdAndDelete(commentId, { session });
 
-      // Remove the comment ID from the post's comments array
       await PostModel.findByIdAndUpdate(
         comment.postId,
         { $pull: { comments: commentId } },
         { session }
       );
 
-      // Commit the transaction
       await session.commitTransaction();
 
       return {
@@ -148,7 +136,6 @@ export const deleteComment = async (userId, data) => {
 
 export const getPostComments = async (postId) => {
   try {
-    // Verify post exists and is active
     const post = await PostModel.findOne({
       _id: postId,
     });
@@ -194,7 +181,6 @@ export const updateComment = async (userId, data) => {
   try {
     const { commentId, content } = data;
 
-    // Verify user exists
     const userExists = await UserModel.findOne({
       _id: userId,
     });
@@ -206,7 +192,6 @@ export const updateComment = async (userId, data) => {
       };
     }
 
-    // First find the comment to verify ownership and existence
     const comment = await CommentModel.findOne({
       _id: commentId,
       userId,
@@ -219,7 +204,6 @@ export const updateComment = async (userId, data) => {
       };
     }
 
-    // Verify post still exists and is active
     const post = await PostModel.findOne({
       _id: comment.postId,
     });
@@ -231,17 +215,15 @@ export const updateComment = async (userId, data) => {
       };
     }
 
-    // Start a session for the transaction
     const session = await mongoose.startSession();
     session.startTransaction();
 
     try {
-      // Update the comment
       const updatedComment = await CommentModel.findByIdAndUpdate(
         commentId,
         {
           content,
-          updatedAt: new Date(), // Explicitly update the timestamp
+          updatedAt: new Date(), 
         },
         {
           new: true,
@@ -249,7 +231,6 @@ export const updateComment = async (userId, data) => {
         }
       );
 
-      // If update successful, commit the transaction
       await session.commitTransaction();
 
       const transformedComment = {
@@ -269,7 +250,6 @@ export const updateComment = async (userId, data) => {
         },
       };
     } catch (error) {
-      // If error occurs, abort the transaction
       await session.abortTransaction();
       throw error;
     } finally {

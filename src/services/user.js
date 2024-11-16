@@ -6,7 +6,6 @@ export const userRegister = async (data) => {
   try {
     const { name, username, password, bio } = data;
 
-    // Check if username already exists
     const existingUser = await UserModel.findOne({ username });
     if (existingUser) {
       return {
@@ -15,11 +14,9 @@ export const userRegister = async (data) => {
       };
     }
 
-    // Hash the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create a new user
     const newUser = new UserModel({
       name,
       username,
@@ -28,7 +25,6 @@ export const userRegister = async (data) => {
     });
     const savedUser = await newUser.save();
 
-    // Generate a JWT token
     const token = jwt.sign(
       { userId: savedUser._id, username: savedUser.username },
       process.env.JWT_SECRET,
@@ -37,7 +33,6 @@ export const userRegister = async (data) => {
       }
     );
 
-    // Return the token and user data
     return {
       success: true,
       token,
@@ -61,7 +56,6 @@ export const userLogin = async (data) => {
   try {
     const { username, password } = data;
 
-    //check if user register or not
     const existingUser = await UserModel.findOne({ username: username });
     if (!existingUser) {
       return {

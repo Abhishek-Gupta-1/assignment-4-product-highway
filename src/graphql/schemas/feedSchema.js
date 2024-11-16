@@ -42,7 +42,6 @@ export const feedTypes = gql`
   }
 `;
 
-
 export const feedQuery = gql`
   type Query {
     feed(options: FeedOptions): FeedResponse!
