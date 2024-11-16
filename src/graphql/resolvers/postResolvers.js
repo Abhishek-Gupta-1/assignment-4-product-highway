@@ -11,7 +11,7 @@ export const postResolvers = {
   },
   Mutation: {
     createPost: async (_, args, context) => {
-      const userId = context.user.id;
+      const userId = context.user.userId;
       console.log("createuserpost")
       const res = await createUserPost(userId, args);
       return res;

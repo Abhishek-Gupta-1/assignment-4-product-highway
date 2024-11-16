@@ -5,17 +5,20 @@ import { followResolvers } from "../resolvers/followResolver.js";
 import { userTypes, userQuery, userMutation } from "./userSchema.js";
 import { postQuery, postMutation, postTypes } from "./postSchema.js";
 import { followQuery, followMutation, followTypes } from "./followSchema.js";
-
-
+import { feedQuery, feedTypes } from "./feedSchema.js";
+import { feedResolvers } from "../resolvers/feedResolver.js";
 
 const typeDefs = gql`
   ${userTypes}
   ${postTypes}
   ${followTypes}
+  ${feedTypes}
+  ${feedTypes}
 
   ${userQuery}
   ${postQuery}
   ${followQuery}
+  ${feedQuery}
 
   ${userMutation}
   ${postMutation}
@@ -72,6 +75,7 @@ const resolvers = {
     ...userResolvers.Query,
     ...postResolvers.Query,
     ...followResolvers.Query,
+    ...feedResolvers.Query,
   },
   Mutation: {
     ...userResolvers.Mutation,

@@ -12,6 +12,7 @@ export const graphqlMiddleware = {
   Query: {
     userPosts: authMiddleware,
     followStats: authMiddleware,
+    feed: authMiddleware
 
   },
 };

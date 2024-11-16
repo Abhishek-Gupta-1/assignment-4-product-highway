@@ -3,6 +3,14 @@ import UserModel from "../models/user.modal.js";
 
 export const toggleFollow = async (userId, followingId) => {
   try {
+    if (!userId || !followingId) {
+      return {
+        success: false,
+        message: "UserId, followingId is required",
+      };
+    }
+
+
     if (userId == followingId) {
       return {
         success: false,
@@ -10,14 +18,9 @@ export const toggleFollow = async (userId, followingId) => {
       };
     }
     console.log("user id ", userId, "follwing id : ", followingId);
-    if (!userId) {
-      return {
-        success: false,
-        message: "UserId is required",
-      };
-    }
+    
 
-    const findFollowing = await UserModel.findById(followingId);
+    const findFollowing = await UserModel.findById(userId);
 
     if (!findFollowing) {
       return {
@@ -26,18 +29,18 @@ export const toggleFollow = async (userId, followingId) => {
       };
     }
 
-    if (!Array.isArray(findFollowing.followers)) {
-      findFollowing.followers = [];
+    if (!Array.isArray(findFollowing.following)) {
+      findFollowing.following = [];
     }
 
     // Check if the user already follows
-    const alreadyFollows = findFollowing.followers.some(
+    const alreadyFollows = findFollowing.following.some(
       (followerId) => followerId.toString() === userId.toString()
     );
 
     if (alreadyFollows) {
       // Remove the user from followers
-      findFollowing.followers = findFollowing.followers.filter(
+      findFollowing.followers = findFollowing.following.filter(
         (followerId) => followerId.toString() !== userId.toString()
       );
       await findFollowing.save();
@@ -48,7 +51,7 @@ export const toggleFollow = async (userId, followingId) => {
       };
     } else {
       // Add the user to followers
-      findFollowing.followers.push(userId);
+      findFollowing.following.push(userId);
       await findFollowing.save();
       return {
         success: true,
