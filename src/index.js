@@ -37,7 +37,9 @@ const server = new ApolloServer({
   server.applyMiddleware({ app });
 
   app.get("/", (req, res) => {
-    res.send("Hello World");
+    res.send(
+      "The Product Highway Assigment ! use /graphql and then you can make query/ API call"
+    );
   });
 
   app.listen(PORT, () => {
