@@ -1,4 +1,4 @@
-import UserModal from "../models/user.modal.js";
+import UserModel from "../models/user.model.js";
 import PostModel from "../models/post.model.js";
 
 export const getUserFeed = async (userId, options = {}) => {
@@ -16,7 +16,7 @@ export const getUserFeed = async (userId, options = {}) => {
     const skip = (page - 1) * limit;
 
     // Get user and verify existence
-    const user = await UserModal.findById(userId).select('following');
+    const user = await UserModel.findById(userId).select('following');
 
     if (!user) {
       return {

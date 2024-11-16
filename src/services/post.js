@@ -45,7 +45,6 @@ export const showUserPost = async (userId) => {
   try {
     const posts = await PostModel.find({
       userId,
-      isActive: true,
     }).sort({ createdAt: -1 });
 
     // Transform each post to include explicit postId

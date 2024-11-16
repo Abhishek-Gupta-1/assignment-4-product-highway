@@ -1,12 +1,18 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-const PostSchema = new Schema({
+const CommentSchema = new Schema({
   content: {
     type: String,
     required: true,
     trim: true,
-    maxLength: 5000 
+    maxLength: 1000
+  },
+  postId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Post',
+    required: true,
+    index: true
   },
   userId: {
     type: Schema.Types.ObjectId,
@@ -14,14 +20,6 @@ const PostSchema = new Schema({
     required: true,
     index: true
   },
-  likes: [{
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  }],
-  comments: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Comment'
-  }],
   isActive: {
     type: Boolean,
     default: true
@@ -30,5 +28,5 @@ const PostSchema = new Schema({
   timestamps: true
 });
 
-const PostModel =  mongoose.models.Post || mongoose.model('Post', PostSchema);
-export default PostModel;
+const CommentModel = mongoose.models.Comment || mongoose.model('Comment', CommentSchema);
+export default CommentModel;

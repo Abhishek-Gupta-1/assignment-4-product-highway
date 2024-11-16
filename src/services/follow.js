@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import UserModel from "../models/user.modal.js";
+import UserModel from "../models/user.model.js";
 
 export const toggleFollow = async (userId, followingId) => {
   try {

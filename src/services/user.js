@@ -1,4 +1,4 @@
-import UserModal from "../models/user.modal.js";
+import UserModel from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -8,7 +8,7 @@ export const userRegister = async (data) => {
     const { name, username, password, bio } = data;
 
     // Check if username already exists
-    const existingUser = await UserModal.findOne({ username });
+    const existingUser = await UserModel.findOne({ username });
     if (existingUser) {
       return {
         success: false,
@@ -21,7 +21,7 @@ export const userRegister = async (data) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Create a new user
-    const newUser = new UserModal({
+    const newUser = new UserModel({
       name,
       username,
       password: hashedPassword,
@@ -64,7 +64,7 @@ export const userLogin = async (data) => {
     console.log("data of user login :", data);
 
     //check if user register or not
-    const existingUser = await UserModal.findOne({ username: username });
+    const existingUser = await UserModel.findOne({ username: username });
     console.log(existingUser);
     if (!existingUser) {
       console.log("User didn't exist");
@@ -121,7 +121,7 @@ export const userUpdate = async (userId, data) => {
     console.log("data of user update : ", data);
     console.log("userId from token : ", userId);
 
-    const existingUser = await UserModal.findById(userId);
+    const existingUser = await UserModel.findById(userId);
     if (!existingUser) {
       return {
         success: false,
@@ -134,7 +134,7 @@ export const userUpdate = async (userId, data) => {
     if (bio !== undefined) updateFields.bio = bio;
     if (avatar) updateFields.avatar = avatar;
 
-    const updatedUser = await UserModal.findByIdAndUpdate(
+    const updatedUser = await UserModel.findByIdAndUpdate(
       userId,
       { $set: updateFields },
       { new: true }
@@ -173,8 +173,8 @@ export const userUpdate = async (userId, data) => {
 
 export const getUserDataByUsername = async (username) => {
   try {
-    const userData = await UserModal.findOne({ username });
-    console.log("userData",userData);
+    const userData = await UserModel.findOne({ username });
+    console.log("userData", userData);
     if (!userData) {
       return {
         success: false,
@@ -183,7 +183,7 @@ export const getUserDataByUsername = async (username) => {
     }
 
     return {
-      user:{
+      user: {
         id: userData._id,
         name: userData.name,
         username: userData.username,
@@ -191,9 +191,8 @@ export const getUserDataByUsername = async (username) => {
         avatar: userData.avatar,
         followers: userData.followers,
         following: userData.following,
-      }
+      },
     };
-    
   } catch (error) {
     return {
       success: false,

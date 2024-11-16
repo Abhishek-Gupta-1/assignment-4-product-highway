@@ -1,4 +1,3 @@
-import { togglePostLike } from "../services/post.js";
 import { authMiddleware } from "./authMiddleware.js";
 
 export const graphqlMiddleware = {
@@ -9,10 +8,14 @@ export const graphqlMiddleware = {
     deletePost: authMiddleware,
     toggleFollow: authMiddleware,
     togglePostLike: authMiddleware,
+    createComment: authMiddleware,
+    updateComment: authMiddleware,
+    deleteComment: authMiddleware,
   },
   Query: {
     userPosts: authMiddleware,
     followStats: authMiddleware,
     feed: authMiddleware,
+    getPostComments: authMiddleware,
   },
 };
