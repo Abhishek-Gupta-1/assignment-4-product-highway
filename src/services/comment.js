@@ -2,6 +2,7 @@ import CommentModel from "../models/comment.model.js";
 import UserModel from "../models/user.model.js";
 import PostModel from "../models/post.model.js";
 import mongoose from "mongoose";
+import NotificationService from "./notification.js";
 
 export const createComment = async (userId, data) => {
   try {
@@ -54,6 +55,8 @@ export const createComment = async (userId, data) => {
 
       // Commit the transaction
       await session.commitTransaction();
+      await NotificationService.newComment(content, postId);
+
 
       const transformedComment = {
         commentId: savedComment._id,

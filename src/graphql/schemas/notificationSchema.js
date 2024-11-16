@@ -13,7 +13,7 @@ export const notificationTypes = gql`
   enum NotificationType {
     NEW_FOLLOWER
     NEW_COMMENT
-    NEW_LIKE
+    LIKE
     MENTION
   }
 

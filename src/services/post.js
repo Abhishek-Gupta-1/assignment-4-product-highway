@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import PostModel from "../models/post.model.js";
+import NotificationService from "./notification.js";
 
 export const createUserPost = async (userId, data) => {
   try {
@@ -163,8 +164,10 @@ export const togglePostLike = async (userId, data) => {
   try {
     const { postId } = data;
 
+
     const objectId = new mongoose.Types.ObjectId(postId);
     const post = await PostModel.findById(objectId);
+    const postAuthorId = post.userId;
 
 
     if (!post) {
@@ -183,13 +186,18 @@ export const togglePostLike = async (userId, data) => {
         { $push: { likes: userId } },
         { new: true }
       );
+      const state = "like";
+      await NotificationService.newLike(userId, postAuthorId, postId, state);
     } else {
       updatedPost = await PostModel.findByIdAndUpdate(
         postId,
         { $pull: { likes: userId } },
         { new: true }
       );
+      const state = "Unlike";
+      await NotificationService.newLike(userId, postAuthorId, postId, state);
     }
+
 
     const transformedPost = {
       postId: updatedPost._id,

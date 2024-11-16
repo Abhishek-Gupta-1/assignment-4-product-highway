@@ -85,6 +85,7 @@ class NotificationService {
       throw error;
     }
   }
+  
   async newComment(comment, postAuthorId) {
     const message = `New comment on your post: "${comment.content.substring(
       0,
@@ -98,11 +99,12 @@ class NotificationService {
     });
   }
 
-  async newLike(likerId, postAuthorId, postId) {
-    const liker = await UserModal.findById(likerId);
-    const message = `${liker.username} liked your post`;
+
+  async newLike(likerId, postAuthorId, postId, state) {
+    const liker = await UserModel.findById(likerId);
+    const message = `${liker.username} ${state} your post`;
     return await this.createNotification({
-      type: "NEW_LIKE",
+      type: "LIKE",
       userId: postAuthorId,
       message,
       relatedId: postId,

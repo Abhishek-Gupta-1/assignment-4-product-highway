@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const notificationSchema = new mongoose.Schema({
     type: {
         type: String,
-        enum: ['NEW_FOLLOWER', 'NEW_COMMENT', 'NEW_LIKE', 'MENTION'],
+        enum: ['NEW_FOLLOWER', 'NEW_COMMENT', 'LIKE', 'MENTION'],
         required: true
     },
     message: {
