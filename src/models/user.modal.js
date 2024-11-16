@@ -25,6 +25,10 @@ const UserSchema = new Schema({
     type: String,
     default: 'default-avatar.png'
   },
+  posts: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Post'
+  }],
   followers: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
@@ -42,4 +46,4 @@ UserSchema.index({ username: 1 }, { unique: true });
 const UserModal = mongoose.models.User || mongoose.model('User', UserSchema);
 
 
-export default UserModal;
+export default UserModal;

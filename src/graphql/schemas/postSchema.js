@@ -37,5 +37,6 @@ export const postMutation = gql`
     createPost(content: String!): PostResponse!
     updatePost(postId: ID!, content: String!): PostResponse!
     deletePost(postId: ID!): PostResponse!
+    togglePostLike(postId: ID!): PostResponse!
   }
 `;

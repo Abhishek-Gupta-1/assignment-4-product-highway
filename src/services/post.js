@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import PostModel from "../models/post.model.js";
 
 export const createUserPost = async (userId, data) => {
@@ -155,6 +156,63 @@ export const deleteUserPost = async (userId, data) => {
     return {
       success: false,
       message: "Error deleting post",
+      error: error.message,
+    };
+  }
+};
+
+export const togglePostLike = async (userId, data) => {
+  try {
+    const { postId } = data;
+
+    const objectId = new mongoose.Types.ObjectId(postId);
+    const post = await PostModel.findById(objectId);
+
+
+    if (!post) {
+      return {
+        success: false,
+        message: "Post not found",
+      };
+    }
+
+    const hasLiked = post.likes.includes(userId);
+
+    let updatedPost;
+    if (!hasLiked) {
+      updatedPost = await PostModel.findByIdAndUpdate(
+        postId,
+        { $push: { likes: userId } },
+        { new: true }
+      );
+    } else {
+      updatedPost = await PostModel.findByIdAndUpdate(
+        postId,
+        { $pull: { likes: userId } },
+        { new: true }
+      );
+    }
+
+    const transformedPost = {
+      postId: updatedPost._id,
+      content: updatedPost.content,
+      userId: updatedPost.userId,
+      likes: updatedPost.likes,
+      createdAt: updatedPost.createdAt,
+      updatedAt: updatedPost.updatedAt,
+      isActive: updatedPost.isActive,
+    };
+
+    return {
+      success: true,
+      data: {
+        post: transformedPost,
+      },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Error toggling post like",
       error: error.message,
     };
   }

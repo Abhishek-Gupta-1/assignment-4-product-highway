@@ -3,60 +3,77 @@ import UserModel from "../models/user.modal.js";
 
 export const toggleFollow = async (userId, followingId) => {
   try {
+    // Input validation
     if (!userId || !followingId) {
       return {
         success: false,
-        message: "UserId, followingId is required",
+        message: "UserId and followingId are required",
       };
     }
 
-
-    if (userId == followingId) {
+    if (userId === followingId) {
       return {
         success: false,
-        message: "User Can't Follow ItSelf",
+        message: "User cannot follow themselves",
       };
     }
-    console.log("user id ", userId, "follwing id : ", followingId);
-    
 
-    const findFollowing = await UserModel.findById(userId);
+    // Find both users
+    const [currentUser, userToFollow] = await Promise.all([
+      UserModel.findById(userId),
+      UserModel.findById(followingId)
+    ]);
 
-    if (!findFollowing) {
+    // Validate both users exist
+    if (!currentUser || !userToFollow) {
       return {
         success: false,
-        message: "Follwing Account not found",
+        message: "One or both users not found",
       };
     }
 
-    if (!Array.isArray(findFollowing.following)) {
-      findFollowing.following = [];
+    // Initialize arrays if they don't exist
+    if (!Array.isArray(currentUser.following)) {
+      currentUser.following = [];
+    }
+    if (!Array.isArray(userToFollow.followers)) {
+      userToFollow.followers = [];
     }
 
-    // Check if the user already follows
-    const alreadyFollows = findFollowing.following.some(
-      (followerId) => followerId.toString() === userId.toString()
+    // Check if already following
+    const alreadyFollowing = currentUser.following.some(
+      (id) => id.toString() === followingId.toString()
     );
 
-    if (alreadyFollows) {
-      // Remove the user from followers
-      findFollowing.followers = findFollowing.following.filter(
-        (followerId) => followerId.toString() !== userId.toString()
+    if (alreadyFollowing) {
+      // Remove from following and followers
+      currentUser.following = currentUser.following.filter(
+        (id) => id.toString() !== followingId.toString()
       );
-      await findFollowing.save();
+      userToFollow.followers = userToFollow.followers.filter(
+        (id) => id.toString() !== userId.toString()
+      );
+
+      await Promise.all([currentUser.save(), userToFollow.save()]);
+
       return {
         success: true,
         message: "Successfully unfollowed the user",
-        findFollowing,
+        currentUser,
+        userToFollow
       };
     } else {
-      // Add the user to followers
-      findFollowing.following.push(userId);
-      await findFollowing.save();
+      // Add to following and followers
+      currentUser.following.push(followingId);
+      userToFollow.followers.push(userId);
+
+      await Promise.all([currentUser.save(), userToFollow.save()]);
+
       return {
         success: true,
         message: "Successfully followed the user",
-        findFollowing,
+        currentUser,
+        userToFollow
       };
     }
   } catch (error) {
@@ -65,8 +82,8 @@ export const toggleFollow = async (userId, followingId) => {
       success: false,
       message: "Error processing follow/unfollow request",
       error: error.message,
-    };
-  }
+    };
+  }
 };
 
 export const getFollowStats = async (userId) => {

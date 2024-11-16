@@ -1,4 +1,5 @@
-import { authMiddleware } from "../../middleware/authMiddleware.js";
+import { togglePostLike } from "../services/post.js";
+import { authMiddleware } from "./authMiddleware.js";
 
 export const graphqlMiddleware = {
   Mutation: {
@@ -7,12 +8,11 @@ export const graphqlMiddleware = {
     updatePost: authMiddleware,
     deletePost: authMiddleware,
     toggleFollow: authMiddleware,
-
+    togglePostLike: authMiddleware,
   },
   Query: {
     userPosts: authMiddleware,
     followStats: authMiddleware,
-    feed: authMiddleware
-
+    feed: authMiddleware,
   },
 };
