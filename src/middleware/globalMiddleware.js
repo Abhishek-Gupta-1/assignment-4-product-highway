@@ -11,6 +11,7 @@ export const graphqlMiddleware = {
     createComment: authMiddleware,
     updateComment: authMiddleware,
     deleteComment: authMiddleware,
+
   },
   Query: {
     userPosts: authMiddleware,

@@ -101,7 +101,6 @@ export const postResolvers = {
     comments: async (post) => {
       const comments = await CommentModel.find({
         _id: { $in: post.comments },
-        isActive: true,
       }).sort({ createdAt: -1 });
 
       return comments.map((comment) => ({

@@ -148,7 +148,6 @@ export const getPostComments = async (postId) => {
     // Verify post exists and is active
     const post = await PostModel.findOne({
       _id: postId,
-      isActive: true,
     });
 
     if (!post) {
@@ -160,7 +159,6 @@ export const getPostComments = async (postId) => {
 
     const comments = await CommentModel.find({
       postId,
-      isActive: true,
     }).sort({ createdAt: -1 });
 
     const transformedComments = comments.map((comment) => ({
@@ -196,7 +194,6 @@ export const updateComment = async (userId, data) => {
     // Verify user exists
     const userExists = await UserModel.findOne({
       _id: userId,
-      isActive: true,
     });
 
     if (!userExists) {
@@ -210,7 +207,6 @@ export const updateComment = async (userId, data) => {
     const comment = await CommentModel.findOne({
       _id: commentId,
       userId,
-      isActive: true,
     });
 
     if (!comment) {
@@ -223,7 +219,6 @@ export const updateComment = async (userId, data) => {
     // Verify post still exists and is active
     const post = await PostModel.findOne({
       _id: comment.postId,
-      isActive: true,
     });
 
     if (!post) {

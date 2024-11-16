@@ -81,7 +81,6 @@ export const updateUserPost = async (userId, data) => {
     const post = await PostModel.findOne({
       _id: postId,
       userId,
-      isActive: true,
     });
 
     if (!post) {
