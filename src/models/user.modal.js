@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
@@ -37,6 +37,9 @@ const UserSchema = new Schema({
   timestamps: true,
 });
 
-const UserModal = mongoose.model('User', UserSchema);
+UserSchema.index({ username: 1 }, { unique: true });
+
+const UserModal = mongoose.models.User || mongoose.model('User', UserSchema);
+
 
 export default UserModal;

@@ -1,22 +1,22 @@
-import FollowModel from "../models/follow.model.js";
+import UserModal from "../models/user.modal.js";
 import PostModel from "../models/post.model.js";
 
-export const getUserFeed = async (systemId, options = {}) => {
+export const getUserFeed = async (userId, options = {}) => {
   try {
+    console.log("userdid: ", userId);
+
     // Default pagination options
     const page = parseInt(options.page) || 1;
     const limit = parseInt(options.limit) || 10;
     const skip = (page - 1) * limit;
 
-    // Get list of users that systemId follows
-    const following = await FollowModel.find({ 
-      systemId 
-    }).select('userId');
-    
-    const followedUserIds = following.map(follow => follow.userId);
+    // Get user's following list directly from UserModal
+    const user = await UserModal.findById(userId);
 
-    // If user follows no one, return empty feed
-    if (followedUserIds.length === 0) {
+    console.log("user: ", user);
+
+    // If user not found or follows no one, return empty feed
+    if (!user || user.following.length === 0) {
       return {
         success: true,
         message: "No posts available - try following some users!",
@@ -26,42 +26,46 @@ export const getUserFeed = async (systemId, options = {}) => {
             currentPage: page,
             totalPages: 0,
             totalPosts: 0,
-            hasMore: false
-          }
-        }
+            hasMore: false,
+          },
+        },
       };
     }
 
     // Get total count for pagination
     const totalPosts = await PostModel.countDocuments({
-      userId: { $in: followedUserIds },
-      isActive: true
+      userId: { $in: user.following },
     });
+
+    console.log("tot cou: ", totalPosts);
 
     // Get posts from followed users
     const posts = await PostModel.find({
-      userId: { $in: followedUserIds },
-      isActive: true
+      userId: { $in: user.following },
     })
-    .sort({ createdAt: -1 }) 
-    .skip(skip)
-    .limit(limit)
-    .populate('userId', 'name username profilePic') 
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+    
+
+    console.log("posts: ", posts);
 
     // Transform posts for consistent response
-    const transformedPosts = posts.map(post => ({
+    const transformedPosts = posts.map((post) => ({
       postId: post._id,
       content: post.content,
       author: {
         userId: post.userId._id,
         name: post.userId.name,
         username: post.userId.username,
-        profilePic: post.userId.profilePic
+        profilePic: post.userId.avatar, // Changed to match schema
       },
       likes: post.likes,
       createdAt: post.createdAt,
-      updatedAt: post.updatedAt
+      updatedAt: post.updatedAt,
     }));
+
+    console.log("treansform psot: ", transformedPosts);
 
     const totalPages = Math.ceil(totalPosts / limit);
 
@@ -73,17 +77,16 @@ export const getUserFeed = async (systemId, options = {}) => {
           currentPage: page,
           totalPages,
           totalPosts,
-          hasMore: page < totalPages
-        }
-      }
+          hasMore: page < totalPages,
+        },
+      },
     };
-
   } catch (error) {
-    console.error('Error in getUserFeed:', error);
+    console.error("Error in getUserFeed:", error);
     return {
       success: false,
       message: "Error fetching user feed",
-      error: error.message
+      error: error.message,
     };
   }
 };

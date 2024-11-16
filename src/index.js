@@ -1,8 +1,8 @@
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { typeDefs, resolvers } from "./graphql/schemas/userSchema.js";
+import { typeDefs, resolvers } from "./graphql/schemas/index.js";
 import { connectDB } from "./config/db.js";
-import { graphqlMiddleware } from "./graphql/resolvers/userResolvers.js";
+import { graphqlMiddleware } from "./graphql/resolvers/globalMiddleware.js";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { applyMiddleware } from "graphql-middleware";
 
@@ -15,6 +15,7 @@ connectDB();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+console.log({ typeDefs, resolvers });
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 const schemaWithMiddleware = applyMiddleware(schema, graphqlMiddleware);
@@ -36,7 +37,9 @@ const server = new ApolloServer({
   server.applyMiddleware({ app });
 
   app.get("/", (req, res) => {
-    res.send("Hello World");
+    res.send(
+      "The Product Highway Assigment ! use /graphql and then you can make query/ API call"
+    );
   });
 
   app.listen(PORT, () => {
