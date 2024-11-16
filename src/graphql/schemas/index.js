@@ -7,6 +7,8 @@ import { postQuery, postMutation, postTypes } from "./postSchema.js";
 import { followQuery, followMutation, followTypes } from "./followSchema.js";
 import { feedQuery, feedTypes } from "./feedSchema.js";
 import { feedResolvers } from "../resolvers/feedResolver.js";
+import { notificationMutation, notificationQuery, notificationTypes } from "./notificationSchema.js";
+import { notificationResolvers } from "../resolvers/notificationResolver.js";
 
 const typeDefs = gql`
   ${userTypes}
@@ -14,15 +16,18 @@ const typeDefs = gql`
   ${followTypes}
   ${feedTypes}
   ${feedTypes}
+  ${notificationTypes}
 
   ${userQuery}
   ${postQuery}
   ${followQuery}
   ${feedQuery}
+  ${notificationQuery}
 
   ${userMutation}
   ${postMutation}
   ${followMutation}
+  ${notificationMutation}
 `;
 
 // const typeDefs = gql`
@@ -76,11 +81,13 @@ const resolvers = {
     ...postResolvers.Query,
     ...followResolvers.Query,
     ...feedResolvers.Query,
+    ...notificationResolvers.Query
   },
   Mutation: {
     ...userResolvers.Mutation,
     ...postResolvers.Mutation,
     ...followResolvers.Mutation,
+    ...notificationResolvers.Mutation,
   },
   User: {
     ...userResolvers.User,
@@ -88,6 +95,9 @@ const resolvers = {
   Post: {
     ...postResolvers.Post,
   },
+  Subscription:{
+    ...notificationResolvers.Subscription,
+  }
 };
 
 export { typeDefs, resolvers };

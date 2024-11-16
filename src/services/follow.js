@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import UserModel from "../models/user.model.js";
+import NotificationService from "./notification.js";
 
 export const toggleFollow = async (userId, followingId) => {
   try {
@@ -21,7 +22,7 @@ export const toggleFollow = async (userId, followingId) => {
     // Find both users
     const [currentUser, userToFollow] = await Promise.all([
       UserModel.findById(userId),
-      UserModel.findById(followingId)
+      UserModel.findById(followingId),
     ]);
 
     // Validate both users exist
@@ -54,26 +55,32 @@ export const toggleFollow = async (userId, followingId) => {
         (id) => id.toString() !== userId.toString()
       );
 
+      const state = "follow";
+
       await Promise.all([currentUser.save(), userToFollow.save()]);
+      await NotificationService.newFollower(followingId, userId, state);
 
       return {
         success: true,
         message: "Successfully unfollowed the user",
         currentUser,
-        userToFollow
+        userToFollow,
       };
     } else {
       // Add to following and followers
       currentUser.following.push(followingId);
       userToFollow.followers.push(userId);
 
+      const state = "Unfollow";
+
       await Promise.all([currentUser.save(), userToFollow.save()]);
+      await NotificationService.newFollower(followingId, userId, state);
 
       return {
         success: true,
         message: "Successfully followed the user",
         currentUser,
-        userToFollow
+        userToFollow,
       };
     }
   } catch (error) {
@@ -82,8 +89,8 @@ export const toggleFollow = async (userId, followingId) => {
       success: false,
       message: "Error processing follow/unfollow request",
       error: error.message,
-    };
-  }
+    };
+  }
 };
 
 export const getFollowStats = async (userId) => {
