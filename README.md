@@ -5,18 +5,21 @@ A robust social networking backend built with GraphQL, Express.js, Node.js, and 
 ## 🚀 Features
 
 - **User Management**
+
   - User registration and authentication with JWT
   - Profile management (update name, bio, avatar)
   - User details retrieval
   - Secure password handling
 
 - **Post System**
+
   - Create, read, update, and delete posts
   - View user-specific posts
   - Post content management
   - Post status tracking (active/inactive)
 
 - **Social Features**
+
   - Follow/Unfollow functionality
   - Follow statistics (followers/following counts)
   - User relationship management
@@ -26,25 +29,33 @@ A robust social networking backend built with GraphQL, Express.js, Node.js, and 
   - Like/Unlike posts
   - Comment system (create, read, update, delete)
   - Post engagement tracking
-  
 - **Feed Management**
   - Personalized user feed
   - Pagination support
   - Post sorting and filtering
   - Real-time feed updates
+- **Notification System**
+  - Real-time notifications using GraphQL Subscriptions
+  - Notifications for new followers/unfollows
+  - Notifications for post likes/unlikes
+  - Notifications for new comments
+  - Console-based notification tracking (local setup only)
 
 ## 🌐 Access Options
 
 ### 1. Local Setup
+
 If you want to run the project locally, follow these steps:
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/Abhishek-Gupta-1/assignment-4-product-highway
 cd assignment-4-product-highway
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 # or
@@ -54,6 +65,7 @@ yarn install
 3. Create and configure `.env` file (see Environment Variables section below)
 
 4. Start the server:
+
 ```bash
 npm run dev
 # or
@@ -61,16 +73,20 @@ yarn dev
 ```
 
 The local server will be available at:
+
 - Main endpoint: `http://localhost:3000`
 - GraphQL Playground: `http://localhost:3000/graphql`
 
 ### 2. Deployed Version
+
 If you want to use the deployed version, you can directly access:
+
 ```
 https://abhishek-assignment.vercel.app/graphql
 ```
 
 To test the deployed API, you can use this curl command (Note: To test on Postman copy this curl command and paste in Postman):
+
 ```bash
 curl --request POST \
   --header 'content-type: application/json' \
@@ -81,7 +97,9 @@ curl --request POST \
 ## 🧪 Testing API Endpoints
 
 ### Authentication
+
 Most of the API Query Endpoints authenticated requests require the Authorization header with a JWT token( Note: You have to paste this token in header with Authorization as key and token as value):
+
 ```
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
@@ -89,6 +107,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ### User Management
 
 #### Register User
+
 ```graphql
 mutation Register($name: String!, $username: String!, $password: String!) {
   register(name: $name, username: $username, password: $password) {
@@ -111,6 +130,7 @@ mutation Register($name: String!, $username: String!, $password: String!) {
 ```
 
 #### Login User
+
 ```graphql
 mutation Login($username: String!, $password: String!) {
   login(username: $username, password: $password) {
@@ -134,7 +154,54 @@ mutation Login($username: String!, $password: String!) {
 }
 ```
 
+### Notification System
+
+The notification system is implemented using GraphQL Subscriptions (PubSub) and currently only shows output in terminal in local development environment. It automatically triggers notifications for the following events:
+
+The notification system automatically triggers when:
+
+- A user follows/unfollows another user
+- A user likes/unlikes a post
+- A user comments on a post
+
+To see notifications in action (Local Setup):
+
+1. Start the server in development mode
+2. Monitor the console output for notification logs(on terminal)
+3. Perform actions like following a user, liking a post, or commenting
+4. Check the console for messages like:
+
+   ```
+   [NotificationService] Creating notification: {
+   type: 'LIKE',
+   userId: new ObjectId('6735e30208d41f350d27c705'),
+   message: 'Rohan like your post',
+   relatedId: '67392fbff1e733a0d7cc5c0d'
+   }
+   [NotificationService] Notification created: {
+   type: 'LIKE',
+   message: 'Rohan like your post',
+   userId: new ObjectId('6735e30208d41f350d27c705'),
+   isRead: false,
+   relatedId: new ObjectId('67392fbff1e733a0d7cc5c0d'),
+   _id: new ObjectId('6739fec648d4d788920e1608'),
+   createdAt: 2024-11-17T14:33:42.053Z,
+   updatedAt: 2024-11-17T14:33:42.053Z,
+   __v: 0
+   }
+   [NotificationService] Publishing to channel: NOTIFICATION_ADDED.6735e30208d41f350d27c705
+   [NotificationService] Published successfully
+
+   ```
+
+Note: The notification system is currently configured for local development and console output only. To implement real-time notifications in a production environment, we'll need to:
+
+- Set up a WebSocket connection in your frontend
+- Subscribe to the notification channel for the logged-in user
+- Handle and display notifications in your UI
+
 #### Update User Profile
+
 ```graphql
 mutation UpdateUser($name: String, $bio: String, $avatar: String) {
   updateUser(name: $name, bio: $bio, avatar: $avatar) {
@@ -162,6 +229,7 @@ mutation UpdateUser($name: String, $bio: String, $avatar: String) {
 ```
 
 #### Get User Details
+
 ```graphql
 query GetUser($username: String!) {
   Getuser(username: $username) {
@@ -185,6 +253,7 @@ query GetUser($username: String!) {
 ### Posts
 
 #### Get User Posts
+
 ```graphql
 query UserPosts($userId: ID!) {
   userPosts(userId: $userId) {
@@ -224,6 +293,7 @@ query UserPosts($userId: ID!) {
 ```
 
 #### Create Post
+
 ```graphql
 mutation CreatePost($content: String!) {
   createPost(content: $content) {
@@ -250,6 +320,7 @@ mutation CreatePost($content: String!) {
 ```
 
 #### Update Post
+
 ```graphql
 mutation UpdatePost($postId: ID!, $content: String!) {
   updatePost(postId: $postId, content: $content) {
@@ -274,6 +345,7 @@ mutation UpdatePost($postId: ID!, $content: String!) {
 ```
 
 #### Delete Post
+
 ```graphql
 mutation DeletePost($postId: ID!) {
   deletePost(postId: $postId) {
@@ -298,6 +370,7 @@ mutation DeletePost($postId: ID!) {
 ### Follow System
 
 #### Get Follow Stats
+
 ```graphql
 query FollowStats($userId: ID!) {
   followStats(userId: $userId) {
@@ -326,6 +399,7 @@ query FollowStats($userId: ID!) {
 ```
 
 #### Toggle Follow
+
 ```graphql
 mutation ToggleFollow($followingId: ID!) {
   toggleFollow(followingId: $followingId) {
@@ -356,6 +430,7 @@ mutation ToggleFollow($followingId: ID!) {
 ### Feed
 
 #### Get User Feed
+
 ```graphql
 query Feed($options: FeedOptions) {
   feed(options: $options) {
@@ -398,6 +473,7 @@ query Feed($options: FeedOptions) {
 ### Likes
 
 #### Toggle Post Like
+
 ```graphql
 mutation TogglePostLike($postId: ID!) {
   togglePostLike(postId: $postId) {
@@ -432,6 +508,7 @@ mutation TogglePostLike($postId: ID!) {
 ### Comments
 
 #### Create Comment
+
 ```graphql
 mutation CreateComment($postId: ID!, $content: String!) {
   createComment(postId: $postId, content: $content) {
@@ -460,6 +537,7 @@ mutation CreateComment($postId: ID!, $content: String!) {
 ```
 
 #### Get Post Comments
+
 ```graphql
 query GetPostComments($postId: ID!) {
   getPostComments(postId: $postId) {
@@ -488,6 +566,7 @@ query GetPostComments($postId: ID!) {
 ```
 
 #### Update Comment
+
 ```graphql
 mutation UpdateComment($commentId: ID!, $content: String!) {
   updateComment(commentId: $commentId, content: $content) {
@@ -516,6 +595,7 @@ mutation UpdateComment($commentId: ID!, $content: String!) {
 ```
 
 #### Delete Comment
+
 ```graphql
 mutation DeleteComment($commentId: ID!) {
   deleteComment(commentId: $commentId) {
@@ -534,6 +614,7 @@ mutation DeleteComment($commentId: ID!) {
 ## 📋 Prerequisites
 
 Before you begin, ensure you have the following installed:
+
 - [Node.js](https://nodejs.org/) (v14.0.0 or higher)
 - [MongoDB](https://www.mongodb.com/try/download/community)
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
@@ -541,6 +622,7 @@ Before you begin, ensure you have the following installed:
 ## 🔒 Environment Variables
 
 Create a `.env` file in the root directory:
+
 ```env
 
 # MongoDB Configuration
@@ -571,15 +653,12 @@ JWT_SECRET=your_jwt_secret_key
 └── README.md
 ```
 
-
-
 ## 👥 Contact
 
-Name - [Abhishek Gupta](https://www.linkedin.com/in/abhishek-gupta-7851ba245/)    
+Name - [Abhishek Gupta](https://www.linkedin.com/in/abhishek-gupta-7851ba245/)
 
-Contact - [abhisheknew2023@gmail.com](mailto:abhisheknew2023@gmail.com)  
+Contact - [abhisheknew2023@gmail.com](mailto:abhisheknew2023@gmail.com)
 
-Project Link: [https://github.com/Abhishek-Gupta-1/assignment-4-product-highway](https://github.com/Abhishek-Gupta-1/assignment-4-product-highway)  
+Project Link: [https://github.com/Abhishek-Gupta-1/assignment-4-product-highway](https://github.com/Abhishek-Gupta-1/assignment-4-product-highway)
 
 Project Deployed Link(Vercel): [https://abhishek-assignment.vercel.app/](https://abhishek-assignment.vercel.app/)
-
