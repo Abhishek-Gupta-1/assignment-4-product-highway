@@ -1,4 +1,4 @@
-# Social Network Backend
+# Social Network Backend (GraphQL)
 
 A robust social networking backend built with GraphQL, Express.js, Node.js, and MongoDB. This backend provides essential features for social networking applications including user authentication, post management, friend connections, and more.
 
@@ -40,8 +40,8 @@ If you want to run the project locally, follow these steps:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/social-network-backend.git
-cd social-network-backend
+git clone https://github.com/Abhishek-Gupta-1/assignment-4-product-highway
+cd assignment-4-product-highway
 ```
 
 2. Install dependencies:
@@ -70,7 +70,7 @@ If you want to use the deployed version, you can directly access:
 https://abhishek-assignment.vercel.app/graphql
 ```
 
-To test the deployed API, you can use this curl command:
+To test the deployed API, you can use this curl command (Note: To test on Postman copy this curl command and paste in Postman):
 ```bash
 curl --request POST \
   --header 'content-type: application/json' \
@@ -81,7 +81,7 @@ curl --request POST \
 ## 🧪 Testing API Endpoints
 
 ### Authentication
-All authenticated requests require the Authorization header with a JWT token:
+Most of the API Query Endpoints authenticated requests require the Authorization header with a JWT token( Note: You have to paste this token in header with Authorization as key and token as value):
 ```
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
@@ -571,20 +571,15 @@ JWT_SECRET=your_jwt_secret_key
 └── README.md
 ```
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 
 
 ## 👥 Contact
 
-Your Name - [Abhishek Gupta](https://www.linkedin.com/in/abhishek-gupta-7851ba245/)
-Contact - [abhisheknew2023@gmail.com](mailto:abhisheknew2023@gmail.com)
-Project Link: [https://github.com/Abhishek-Gupta-1/assignment-4-product-highway](https://github.com/Abhishek-Gupta-1/assignment-4-product-highway)
+Name - [Abhishek Gupta](https://www.linkedin.com/in/abhishek-gupta-7851ba245/)    
+
+Contact - [abhisheknew2023@gmail.com](mailto:abhisheknew2023@gmail.com)  
+
+Project Link: [https://github.com/Abhishek-Gupta-1/assignment-4-product-highway](https://github.com/Abhishek-Gupta-1/assignment-4-product-highway)  
+
 Project Deployed Link(Vercel): [https://abhishek-assignment.vercel.app/](https://abhishek-assignment.vercel.app/)
 
